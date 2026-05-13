@@ -1,0 +1,7 @@
+django
+pandas
+pyodbc
+python-dotenv
+django-cors-headers
+whitenoise
+gunicorn
