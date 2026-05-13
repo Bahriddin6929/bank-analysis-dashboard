@@ -4,4 +4,3 @@ pyodbc
 python-dotenv
 django-cors-headers
 whitenoise
-
