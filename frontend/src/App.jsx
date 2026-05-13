@@ -29,7 +29,7 @@ ChartJS.register(
   ArcElement
 );
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = "/api";
 
 function App() {
   const [summary, setSummary] = useState({ total_kirim: 0, total_chiqim: 0, total_transactions: 0 });
