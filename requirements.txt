@@ -5,3 +5,5 @@ python-dotenv
 django-cors-headers
 whitenoise
 gunicorn
+mssql-django
+pyodbc
