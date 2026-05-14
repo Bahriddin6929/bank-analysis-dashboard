@@ -108,3 +108,13 @@ def add_transaction(request):
         return JsonResponse({'error': 'Mijoz topilmadi'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+        from django.core.management import call_command
+from django.http import HttpResponse
+
+def run_migration(request):
+    try:
+        call_command('migrate')
+        return HttpResponse("✅ Ma'lumotlar bazasi muvaffaqiyatli yaratildi! Endi saytga qaytib mijoz qo'shishingiz mumkin.")
+    except Exception as e:
+        return HttpResponse(f"❌ Xatolik yuz berdi: {str(e)}")
+
