@@ -1,4 +1,12 @@
 from django.urls import path
+from .views import run_migration # <-- SHU QATORNI TEPAGA QO'SHING
+
+urlpatterns = [
+    # ... bu yerda sizning oldingi kodingiz bo'ladi ...
+    path('api/migrate/', run_migration), # <-- SHU QATORNI QO'SHING
+]
+
+from django.urls import path
 from . import views
 
 urlpatterns = [
