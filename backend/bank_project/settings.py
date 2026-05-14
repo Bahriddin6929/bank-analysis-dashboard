@@ -9,6 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-key-for-coursework'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://bank-tahlil-dashboard-dgb0haf7cqakfqcu.eastasia-01.azurewebsites.net']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
