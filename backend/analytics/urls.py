@@ -5,4 +5,7 @@ urlpatterns = [
     path('summary', views.get_summary, name='summary'),
     path('top-customers', views.get_top_customers, name='top_customers'),
     path('transactions', views.get_transactions, name='transactions'),
+    path('customers', views.get_customers, name='customers'),
+    path('add-customer', views.add_customer, name='add_customer'),
+    path('add-transaction', views.add_transaction, name='add_transaction'),
 ]
