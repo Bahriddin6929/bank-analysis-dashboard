@@ -26,6 +26,10 @@ jobs:
           source antenv/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          cd backend
+          python manage.py migrate
+          DJANGO_SUPERUSER_PASSWORD=admin python manage.py createsuperuser --username admin --email admin@admin.com --noinput || true
+          cd ..
 
       - name: Build frontend (React)
         run: |
@@ -57,14 +61,4 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_16A0C43B8C5B4D058B34822D2FBD6B5F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BBD98FE073A44DE7AF8CF4D43D642102 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_9BDB432F6A5F4AA5A1F02ABAC9E5EA57 }}
-
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v3
-        id: deploy-to-webapp
-        with:
-          app-name: 'bank-tahlil-dashboard'
-          slot-name: 'Production'
-
+          client-id: ${{ secrets.AZUREAPPSERVICE
