@@ -1,15 +1,20 @@
 from django.urls import path
-from .views import run_migration # <-- SHU QATORNI TEPAGA QO'SHING
-
-urlpatterns = [
-    # ... bu yerda sizning oldingi kodingiz bo'ladi ...
-    path('api/migrate/', run_migration), # <-- SHU QATORNI QO'SHING
-]
-
-from django.urls import path
 from . import views
+from django.core.management import call_command
+from django.http import HttpResponse
+
+def oson_migrate(request):
+    try:
+        call_command('migrate')
+        return HttpResponse("✅ BAZA YARATILDI! Saytga qaytib bemalol saqlashingiz mumkin.")
+    except Exception as e:
+        return HttpResponse(f"Xato: {e}")
 
 urlpatterns = [
+    # Baza yaratish uchun maxsus manzil:
+    path('baza-yaratish/', oson_migrate),
+    
+    # Sizning eski (ishlaydigan) manzillaringiz:
     path('summary', views.get_summary, name='summary'),
     path('top-customers', views.get_top_customers, name='top_customers'),
     path('transactions', views.get_transactions, name='transactions'),
