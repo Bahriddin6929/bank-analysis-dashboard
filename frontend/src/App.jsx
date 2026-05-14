@@ -130,7 +130,7 @@ function CustomersPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni (7777) kiriting:");
+    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni kiriting:");
     if (!pin) return;
     const res = await fetch(`${API_BASE}/add-customer`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin }, body: JSON.stringify(form) });
     const data = await res.json();
@@ -140,7 +140,7 @@ function CustomersPage() {
   };
 
   const handleDelete = async (id) => {
-    const pin = window.prompt("Mijozni o'chirish xavfli! Maxfiy PIN kodni (7777) kiriting:");
+    const pin = window.prompt("Mijozni o'chirish xavfli! Maxfiy PIN kodni kiriting:");
     if (!pin) return;
     if (!window.confirm("Rostdan ham bu mijozni o'chirmoqchimisiz? Tranzaksiyalari ham yo'qoladi.")) return;
     
@@ -217,7 +217,7 @@ function TransactionsPage({ transactions, onRefresh }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni (7777) kiriting:");
+    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni kiriting:");
     if (!pin) return;
     const res = await fetch(`${API_BASE}/add-transaction`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin }, body: JSON.stringify(form) });
     const data = await res.json();
