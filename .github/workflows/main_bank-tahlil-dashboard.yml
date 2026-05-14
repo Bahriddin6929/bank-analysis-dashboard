@@ -27,6 +27,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           cd backend
+          python manage.py makemigrations analytics
+          python manage.py makemigrations
           python manage.py migrate
           DJANGO_SUPERUSER_PASSWORD=admin python manage.py createsuperuser --username admin --email admin@admin.com --noinput || true
           cd ..
