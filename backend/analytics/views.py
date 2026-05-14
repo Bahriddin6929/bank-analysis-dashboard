@@ -6,6 +6,11 @@ import json
 import pandas as pd
 import numpy as np
 
+# PAROLNI TEKSHIRADIGAN MAXSUS FUNKSIYA
+def check_pin(request):
+    pin = request.headers.get('X-Admin-Pin')
+    return pin == '7777'
+
 def get_mock_df():
     np.random.seed(42)
     data = {
@@ -70,6 +75,8 @@ def get_customers(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_customer(request):
+    if not check_pin(request):
+        return JsonResponse({'error': 'Xato! O\'zgartirish kiritish huquqingiz yo\'q (PIN noto\'g\'ri).'}, status=403)
     try:
         data = json.loads(request.body)
         customer_id = data.get('customer_id', '').strip()
@@ -86,6 +93,8 @@ def add_customer(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_transaction(request):
+    if not check_pin(request):
+        return JsonResponse({'error': 'Xato! O\'zgartirish kiritish huquqingiz yo\'q (PIN noto\'g\'ri).'}, status=403)
     try:
         data = json.loads(request.body)
         customer_id = data.get('customer_id')
@@ -108,13 +117,18 @@ def add_transaction(request):
         return JsonResponse({'error': 'Mijoz topilmadi'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
-        from django.core.management import call_command
-from django.http import HttpResponse
 
-def run_migration(request):
+# YANGI QO'SHILDI: O'chirish funksiyasi
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_customer(request, id):
+    if not check_pin(request):
+        return JsonResponse({'error': 'Xato! O\'chirish huquqingiz yo\'q (PIN noto\'g\'ri).'}, status=403)
     try:
-        call_command('migrate')
-        return HttpResponse("✅ Ma'lumotlar bazasi muvaffaqiyatli yaratildi! Endi saytga qaytib mijoz qo'shishingiz mumkin.")
+        customer = Customer.objects.get(id=id)
+        customer.delete()
+        return JsonResponse({'success': 'Mijoz muvaffaqiyatli o\'chirildi!'}, status=200)
+    except Customer.DoesNotExist:
+        return JsonResponse({'error': 'Mijoz topilmadi'}, status=404)
     except Exception as e:
-        return HttpResponse(f"❌ Xatolik yuz berdi: {str(e)}")
-
+        return JsonResponse({'error': str(e)}, status=500)
