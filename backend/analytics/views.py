@@ -10,7 +10,7 @@ import numpy as np
 def check_pin(request):
     pin = request.headers.get('X-Admin-Pin')
     # YANGI, MURAKKAB PAROL:
-    return pin == 'Bahriddin#2026'
+    return pin == 'AbdullayevB6929'
 
 def get_mock_df():
     np.random.seed(42)
