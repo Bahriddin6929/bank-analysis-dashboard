@@ -10,20 +10,6 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointEleme
 
 const API_BASE = "/api";
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    for (let cookie of document.cookie.split(';')) {
-      cookie = cookie.trim();
-      if (cookie.startsWith(name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
 function Sidebar({ activePage, setActivePage, isOpen, setIsOpen }) {
   const navItems = [
     { id: 'dashboard', label: 'Bosh Sahifa', icon: LayoutDashboard },
@@ -144,10 +130,31 @@ function CustomersPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${API_BASE}/add-customer`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni (7777) kiriting:");
+    if (!pin) return;
+    const res = await fetch(`${API_BASE}/add-customer`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin }, body: JSON.stringify(form) });
     const data = await res.json();
     if (res.ok) { setMsg('✅ Mijoz muvaffaqiyatli qo\'shildi!'); setForm({ customer_id: '', full_name: '' }); setShowForm(false); load(); }
     else setMsg(`❌ ${data.error}`);
+    setTimeout(() => setMsg(''), 3000);
+  };
+
+  const handleDelete = async (id) => {
+    const pin = window.prompt("Mijozni o'chirish xavfli! Maxfiy PIN kodni (7777) kiriting:");
+    if (!pin) return;
+    if (!window.confirm("Rostdan ham bu mijozni o'chirmoqchimisiz? Tranzaksiyalari ham yo'qoladi.")) return;
+    
+    const res = await fetch(`${API_BASE}/delete-customer/${id}`, {
+      method: 'DELETE',
+      headers: { 'X-Admin-Pin': pin }
+    });
+    if (res.ok) {
+      setMsg('✅ Mijoz muvaffaqiyatli o\'chirildi!');
+      load();
+    } else {
+      const data = await res.json();
+      setMsg(`❌ ${data.error}`);
+    }
     setTimeout(() => setMsg(''), 3000);
   };
 
@@ -189,8 +196,8 @@ function CustomersPage() {
         ) : (
           <div className="table-wrap">
             <table>
-              <thead><tr><th>#</th><th>Mijoz ID</th><th>To'liq Ismi</th></tr></thead>
-              <tbody>{filtered.map((c, i) => (<tr key={c.id}><td>{i + 1}</td><td><span className="id-badge">C-{c.customer_id}</span></td><td>{c.full_name || '—'}</td></tr>))}</tbody>
+              <thead><tr><th>#</th><th>Mijoz ID</th><th>To'liq Ismi</th><th style={{textAlign: 'right'}}>Harakat</th></tr></thead>
+              <tbody>{filtered.map((c, i) => (<tr key={c.id}><td>{i + 1}</td><td><span className="id-badge">C-{c.customer_id}</span></td><td>{c.full_name || '—'}</td><td style={{textAlign: 'right'}}><button className="btn-secondary" style={{padding: '4px 10px', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.3)', backgroundColor: 'transparent', fontSize: '0.8rem'}} onClick={() => handleDelete(c.id)}>O'chirish</button></td></tr>))}</tbody>
             </table>
           </div>
         )}
@@ -210,7 +217,9 @@ function TransactionsPage({ transactions, onRefresh }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${API_BASE}/add-transaction`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+    const pin = window.prompt("Tasdiqlash uchun maxfiy PIN kodni (7777) kiriting:");
+    if (!pin) return;
+    const res = await fetch(`${API_BASE}/add-transaction`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Admin-Pin': pin }, body: JSON.stringify(form) });
     const data = await res.json();
     if (res.ok) { setMsg('✅ Tranzaksiya muvaffaqiyatli qo\'shildi!'); setForm({ customer_id: '', amount: '', transaction_type: 'Kirim', transaction_date: new Date().toISOString().slice(0, 16) }); setShowForm(false); onRefresh(); }
     else setMsg(`❌ ${data.error}`);
