@@ -6,7 +6,7 @@ from django.http import HttpResponse
 
 def oson_migrate(request):
     try:
-        call_command('makemigrations')
+        call_command('makemigrations', 'analytics') # <-- Shuyerga so'z qo'shildi
         call_command('migrate')
         return HttpResponse("✅ BAZA YARATILDI! Saytga qaytib bemalol saqlashingiz mumkin.")
     except Exception as e:
@@ -16,7 +16,7 @@ urlpatterns = [
     # Baza yaratish uchun maxsus manzil:
     path('baza-yaratish/', oson_migrate),
     
-    # Sizning rasmdagi eski manzillaringiz:
+    # Sizning eski manzillaringiz:
     path('admin/', admin.site.urls),
     path('api/', include('analytics.urls')),
     path('', TemplateView.as_view(template_name='index.html'), name='index'),
