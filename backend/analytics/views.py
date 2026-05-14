@@ -9,7 +9,8 @@ import numpy as np
 # PAROLNI TEKSHIRADIGAN MAXSUS FUNKSIYA
 def check_pin(request):
     pin = request.headers.get('X-Admin-Pin')
-    return pin == '7777'
+    # YANGI, MURAKKAB PAROL:
+    return pin == 'Bahriddin#2026'
 
 def get_mock_df():
     np.random.seed(42)
@@ -118,7 +119,6 @@ def add_transaction(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
-# YANGI QO'SHILDI: O'chirish funksiyasi
 @csrf_exempt
 @require_http_methods(["DELETE"])
 def delete_customer(request, id):
